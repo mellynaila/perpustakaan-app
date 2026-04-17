@@ -10,14 +10,14 @@ class BukuController extends Controller
     public function index()
     {
         $data = Buku::all();
-        return view('buku.index', compact('data'));
+        return view('buku', compact('data'));
     }
 
     public function store(Request $request)
     {
         Buku::create($request->all());
 
-        return redirect()->route('buku.store')
+        return redirect()->route('buku.index')
             ->with('success', 'Data berhasil ditambahkan');
     }
 
@@ -34,7 +34,7 @@ class BukuController extends Controller
         $buku = Buku::findOrFail($id);
         $buku->update($request->all());
 
-        return redirect()->route('buku.update')
+        return redirect()->route('buku.index')
             ->with('success', 'Data berhasil diupdate');
     }
 

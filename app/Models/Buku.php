@@ -9,9 +9,11 @@ class Buku extends Model
 {
     use HasFactory;
 
-    protected $table = 'buku';
-    protected $primaryKey = 'id_buku';
-    public $incrementing = true;
+    protected $table = 'buku'; // sesuaikan dengan nama tabel di database
+
+    protected $primaryKey = 'id_buku'; // karena pakai id_buku
+
+    public $timestamps = true;
 
     protected $fillable = [
         'judul',

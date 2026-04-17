@@ -11,6 +11,12 @@
             background: url("{{ asset('images/bgperpus.jpeg') }}") no-repeat center center/cover;
             color: white;
         }
+
+        .card-custom {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+        }
     </style>
 </head>
 
@@ -18,96 +24,110 @@
 
     <div class="container mt-5">
 
-        <h3 class="text-center mb-4">📚 Data Buku</h3>
+        <!-- HEADER + LOGOUT -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0">📚 Data Buku</h3>
 
-        @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+            <div>
+                <span class="me-3">👤 {{ session('username') }}</span>
+                <a href="{{ route('logout') }}" class="btn btn-danger btn-sm">
+                    🔓 Logout
+                </a>
+            </div>
         </div>
-        @endif
 
-        <!-- Tombol Tambah -->
-        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambah">
-            + Tambah Buku
-        </button>
+        <div class="card-custom">
 
-        <!-- TABLE -->
-        <table class="table table-dark table-hover">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Judul</th>
-                    <th>Penulis</th>
-                    <th>Penerbit</th>
-                    <th>Tahun</th>
-                    <th>Stok</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
+            @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
 
-            <tbody>
-                @foreach($data as $item)
-                <tr>
-                    <td>{{ $item->id_buku }}</td>
-                    <td>{{ $item->judul }}</td>
-                    <td>{{ $item->penulis }}</td>
-                    <td>{{ $item->penerbit }}</td>
-                    <td>{{ $item->tahun_terbit }}</td>
-                    <td>{{ $item->stok }}</td>
-                    <td>
-                        <!-- Tombol Edit -->
-                        <button
-                            class="btn btn-warning btn-sm"
-                            data-bs-toggle="modal"
-                            data-bs-target="#modalEdit{{ $item->id_buku }}">
-                            Edit
-                        </button>
+            <!-- Tombol Tambah -->
+            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambah">
+                + Tambah Buku
+            </button>
 
-                        <!-- Hapus -->
-                        <form action="{{ route('buku.destroy', $item->id_buku) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')">
-                                Hapus
+            <!-- TABLE -->
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Judul</th>
+                        <th>Penulis</th>
+                        <th>Penerbit</th>
+                        <th>Tahun</th>
+                        <th>Stok</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach($data as $item)
+                    <tr>
+                        <td>{{ $item->id_buku }}</td>
+                        <td>{{ $item->judul }}</td>
+                        <td>{{ $item->penulis }}</td>
+                        <td>{{ $item->penerbit }}</td>
+                        <td>{{ $item->tahun_terbit }}</td>
+                        <td>{{ $item->stok }}</td>
+                        <td>
+                            <!-- Edit -->
+                            <button
+                                class="btn btn-warning btn-sm"
+                                data-bs-toggle="modal"
+                                data-bs-target="#edit{{ $item->id_buku }}">
+                                Edit
                             </button>
-                        </form>
-                    </td>
-                </tr>
 
-                <!-- MODAL EDIT -->
-                <div class="modal fade" id="modalEdit{{ $item->id_buku }}" tabindex="-1">
-                    <div class="modal-dialog">
-                        <form action="{{ route('buku.update', $item->id_buku) }}" method="POST">
-                            @csrf
-                            @method('PUT')
+                            <!-- Hapus -->
+                            <form action="{{ route('buku.destroy', $item->id_buku) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')">
+                                    Hapus
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
 
-                            <div class="modal-content text-dark">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Edit Buku</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <!-- MODAL EDIT -->
+                    <div class="modal fade" id="edit{{ $item->id_buku }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <form action="{{ route('buku.update', $item->id_buku) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+
+                                <div class="modal-content text-dark">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Edit Buku</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <input type="text" name="judul" class="form-control mb-2" value="{{ $item->judul }}">
+                                        <input type="text" name="penulis" class="form-control mb-2" value="{{ $item->penulis }}">
+                                        <input type="text" name="penerbit" class="form-control mb-2" value="{{ $item->penerbit }}">
+                                        <input type="number" name="tahun_terbit" class="form-control mb-2" value="{{ $item->tahun_terbit }}">
+                                        <input type="number" name="stok" class="form-control mb-2" value="{{ $item->stok }}">
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button class="btn btn-primary">Update</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                    </div>
                                 </div>
 
-                                <div class="modal-body">
-                                    <input type="text" name="judul" class="form-control mb-2" value="{{ $item->judul }}">
-                                    <input type="text" name="penulis" class="form-control mb-2" value="{{ $item->penulis }}">
-                                    <input type="text" name="penerbit" class="form-control mb-2" value="{{ $item->penerbit }}">
-                                    <input type="number" name="tahun_terbit" class="form-control mb-2" value="{{ $item->tahun_terbit }}">
-                                    <input type="number" name="stok" class="form-control mb-2" value="{{ $item->stok }}">
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button class="btn btn-primary">Update</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                </div>
-                            </div>
-
-                        </form>
+                            </form>
+                        </div>
                     </div>
-                </div>
 
-                @endforeach
-            </tbody>
-        </table>
+                    @endforeach
+                </tbody>
+            </table>
+
+        </div>
 
     </div>
 
@@ -141,7 +161,7 @@
         </div>
     </div>
 
-    <!-- JS Bootstrap -->
+    <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

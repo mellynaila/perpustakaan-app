@@ -24,16 +24,9 @@
 
     <div class="container mt-5">
 
-        <!-- HEADER + LOGOUT -->
+        <!-- HEADER -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="mb-0">📚 Data Buku</h3>
-
-            <div>
-                <span class="me-3">👤 {{ session('username') }}</span>
-                <a href="{{ route('logout') }}" class="btn btn-danger btn-sm">
-                    🔓 Logout
-                </a>
-            </div>
         </div>
 
         <div class="card-custom">

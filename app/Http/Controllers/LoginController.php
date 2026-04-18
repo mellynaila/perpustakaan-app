@@ -16,7 +16,7 @@ class LoginController extends Controller
         if ($request->username == "admin" && $request->password == "1234") {
 
             session(['username' => $request->username]);
-            return redirect('/buku');
+            return redirect('/dashboard');
         }
 
         return back()->with('error', 'Username atau Password salah');
@@ -25,6 +25,6 @@ class LoginController extends Controller
     public function logout()
     {
         session()->forget('username');
-        return redirect('/buku.index');
+        return redirect('/');
     }
 }

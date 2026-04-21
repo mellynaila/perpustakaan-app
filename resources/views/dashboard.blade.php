@@ -34,27 +34,6 @@
             </div>
         </a>
     </div>
-
-    <!-- PEMINJAMAN -->
-    <div class="col-md-3">
-        <div class="card bg-warning text-white border">
-            <div class="card-body">
-                <h4>{{ $totalPinjam ?? 0 }}</h4>
-                <p>📊 Peminjaman</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- PENGEMBALIAN -->
-    <div class="col-md-3">
-        <div class="card bg-danger text-white border">
-            <div class="card-body">
-                <h4>{{ $totalKembali ?? 0 }}</h4>
-                <p>🔄 Pengembalian</p>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 @endsection

@@ -14,14 +14,10 @@ class DashboardController extends Controller
 
         // data untuk card
         $totalBuku = Buku::count();
-        $totalPinjam = 0;
-        $totalKembali = 0;
 
         return view('dashboard', compact(
             'buku',
             'totalBuku',
-            'totalPinjam',
-            'totalKembali'
         ));
     }
 }

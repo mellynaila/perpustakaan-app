@@ -1,16 +1,20 @@
-<div class="sidebar bg-white border-end">
-    <h5 class="p-3">Menu</h5>
+<div class="col-md-2 sidebar">
+    <h4>📚 Perpus</h4>
+    <hr>
 
-    <ul class="nav flex-column px-2">
+    <a href="/dashboard" class="{{ request()->is('dashboard') ? 'active-menu' : '' }}">
+        🏠 Dashboard
+    </a>
 
-        <li class="nav-item mb-2">
-            <a href="/dashboard" class="nav-link">🏠 Dashboard</a>
-        </li>
+    <a href="/anggota" class="{{ request()->is('anggota*') ? 'active-menu' : '' }}">
+        👤 Anggota
+    </a>
 
-        <li class="nav-item mb-2">
-            <a href="/buku" class="nav-link">📚 Data Buku</a>
-        </li>
+    <a href="/buku" class="{{ request()->is('buku*') ? 'active-menu' : '' }}">
+        📖 Buku
+    </a>
 
-
-    </ul>
+    <a href="/peminjaman" class="{{ request()->is('peminjaman*') ? 'active-menu' : '' }}">
+        🔄 Peminjaman
+    </a>
 </div>

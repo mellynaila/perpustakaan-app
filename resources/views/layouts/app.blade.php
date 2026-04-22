@@ -1,49 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>E-Perpus</title>
+    <meta charset="UTF-8">
+    <title>@yield('title')</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         body {
-            background: url("{{ asset('images/bgperpus.jpeg') }}") no-repeat center center/cover;
-            background-size: cover;
-            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6f9;
         }
 
         .sidebar {
-            width: 250px;
-            min-height: 100vh;
-            background: white;
+            height: 100vh;
+            background: #343a40;
+            color: white;
+            padding: 20px;
         }
 
-        .main-content {
-            background: rgba(255, 255, 255, 0.95);
-            min-height: 100vh;
+        .sidebar a {
+            color: white;
+            display: block;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: 0.3s;
         }
 
-        table tbody tr:hover {
-            background-color: #f2f2f2;
+        .sidebar a:hover {
+            background: #495057;
+        }
+
+        .active-menu {
+            background: #0d6efd;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
         }
     </style>
 </head>
 
 <body>
 
-    @include('layouts.navbar')
+    <div class="container-fluid">
+        <div class="row">
 
-    <div class="d-flex">
-        @include('layouts.sidebar')
+            @include('layouts.sidebar')
 
-        <div class="p-4 w-100 main-content">
-            @yield('content')
+            <div class="col-md-10">
+
+                @include('layouts.navbar')
+
+                <div class="content">
+                    @yield('content')
+                </div>
+
+            </div>
+
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

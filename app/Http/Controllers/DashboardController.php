@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Anggota;
 use App\Models\Buku;
-//use App\Models\Pengguna;
+use App\Models\Peminjaman;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // ambil 6 buku terbaru
-        $buku = Buku::latest()->take(6)->get();
-
-        // data untuk card
+        $totalAnggota = Anggota::count();
         $totalBuku = Buku::count();
+        $totalPeminjaman = Peminjaman::count();
 
         return view('dashboard', compact(
-            'buku',
+            'totalAnggota',
             'totalBuku',
+            'totalPeminjaman'
         ));
     }
 }

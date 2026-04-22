@@ -3,46 +3,42 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Buku;
 
 class BukuController extends Controller
 {
     public function index()
     {
-        $data = Buku::all();
-        return view('buku', compact('data'));
+        $buku = \App\Models\Buku::all();
+        return view('buku', compact('buku'));
+    }
+
+    public function create()
+    {
+        return view('buku.create');
     }
 
     public function store(Request $request)
     {
-        Buku::create($request->all());
-
-        return redirect()->route('buku.index')
-            ->with('success', 'Data berhasil ditambahkan');
+        \App\Models\Buku::create($request->all());
+        return redirect('/buku');
     }
 
     public function edit($id)
     {
-        $data = Buku::all();
-        $edit = Buku::findOrFail($id);
-
-        return view('buku.edit', compact('data', 'edit'));
+        $buku = \App\Models\Buku::find($id);
+        return view('buku.edit', compact('buku'));
     }
 
     public function update(Request $request, $id)
     {
-        $buku = Buku::findOrFail($id);
-        $buku->update($request->all());
-
-        return redirect()->route('buku.index')
-            ->with('success', 'Data berhasil diupdate');
+        $b = \App\Models\Buku::find($id);
+        $b->update($request->all());
+        return redirect('/buku');
     }
 
-    public function destroy($id)
+    public function delete($id)
     {
-        Buku::destroy($id);
-
-        return redirect()->route('buku.index')
-            ->with('success', 'Data berhasil dihapus');
+        \App\Models\Buku::find($id)->delete();
+        return redirect('/buku');
     }
 }

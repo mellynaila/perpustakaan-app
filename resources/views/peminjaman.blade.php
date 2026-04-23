@@ -1,64 +1,51 @@
 @extends('layouts.app')
 
-@section('title', 'Peminjaman')
-
 @section('content')
+    <div class="container mt-4">
 
-    <style>
-        .card-custom {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 15px;
-            color: white;
-        }
-    </style>
+        <h3 class="mb-3">📖 Data Peminjaman</h3>
 
-    <h3 class="mb-3">📖 Data Peminjaman</h3>
+        <!-- ALERT -->
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
 
-    <div class="card-custom">
-
-        <!-- Tombol Tambah -->
+        <!-- BUTTON -->
         <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalTambah">
             + Tambah Peminjaman
         </button>
 
         <!-- TABLE -->
-        <table class="table table-dark table-hover">
-            <thead>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
                 <tr>
-                    <th>No</th>
                     <th>Nama Peminjam</th>
                     <th>Buku</th>
-                    <th>Tanggal Pinjam</th>
-                    <th>Tanggal Kembali</th>
-                    <th>Aksi</th>
+                    <th>Tgl Pinjam</th>
+                    <th width="150">Aksi</th>
                 </tr>
             </thead>
 
             <tbody>
                 @foreach ($peminjaman as $item)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->nm_peminjam }}</td>
+                        <td>{{ $item->nama_peminjam }}</td>
                         <td>{{ $item->buku->judul_buku ?? '-' }}</td>
                         <td>{{ $item->tgl_pinjam }}</td>
-                        <td>{{ $item->tgl_kembali }}</td>
                         <td>
 
-                            <!-- Edit -->
+                            <!-- EDIT -->
                             <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#edit{{ $item->kd_pinjam }}">
+                                data-bs-target="#edit{{ $item->id }}">
                                 Edit
                             </button>
 
-                            <!-- Hapus -->
-                            <form action="{{ route('peminjaman.destroy', $item->kd_pinjam) }}" method="POST"
+                            <!-- DELETE -->
+                            <form action="{{ route('peminjaman.destroy', $item->id) }}" method="POST"
                                 style="display:inline;">
                                 @csrf
                                 @method('DELETE')
@@ -71,23 +58,25 @@
                     </tr>
 
                     <!-- MODAL EDIT -->
-                    <div class="modal fade" id="edit{{ $item->kd_pinjam }}">
+                    <div class="modal fade" id="edit{{ $item->id }}">
                         <div class="modal-dialog">
-                            <form action="{{ route('peminjaman.update', $item->kd_pinjam) }}" method="POST">
+                            <form action="{{ route('peminjaman.update', $item->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
 
-                                <div class="modal-content text-dark">
+                                <div class="modal-content">
                                     <div class="modal-header">
                                         <h5>Edit Peminjaman</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
 
                                     <div class="modal-body">
-                                        <input type="text" name="nm_peminjam" class="form-control mb-2"
-                                            value="{{ $item->nm_peminjam }}">
 
-                                        <select name="id_buku" class="form-control mb-2">
+                                        <!-- FIX VALUE -->
+                                        <input type="text" name="nama_peminjam" value="{{ $item->nama_peminjam }}"
+                                            class="form-control mb-2" required>
+
+                                        <select name="id_buku" class="form-control mb-2" required>
                                             @foreach ($buku as $b)
                                                 <option value="{{ $b->id_buku }}"
                                                     {{ $item->id_buku == $b->id_buku ? 'selected' : '' }}>
@@ -96,11 +85,9 @@
                                             @endforeach
                                         </select>
 
-                                        <input type="date" name="tgl_pinjam" class="form-control mb-2"
-                                            value="{{ $item->tgl_pinjam }}">
+                                        <input type="date" name="tgl_pinjam" value="{{ $item->tgl_pinjam }}"
+                                            class="form-control mb-2" required>
 
-                                        <input type="date" name="tgl_kembali" class="form-control mb-2"
-                                            value="{{ $item->tgl_kembali }}">
                                     </div>
 
                                     <div class="modal-footer">
@@ -123,7 +110,7 @@
             <form action="{{ route('peminjaman.store') }}" method="POST">
                 @csrf
 
-                <div class="modal-content text-dark">
+                <div class="modal-content">
                     <div class="modal-header">
                         <h5>Tambah Peminjaman</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -131,19 +118,22 @@
 
                     <div class="modal-body">
 
-                        <input type="text" name="nm_peminjam" class="form-control mb-2" placeholder="Nama Peminjam">
+                        <!-- FIX NAME -->
+                        <input type="text" name="nama_peminjam" class="form-control mb-2" placeholder="Nama Peminjam"
+                            required>
 
-                        <select name="id_buku" class="form-control mb-2">
+                        <select name="id_buku" class="form-control mb-2" required>
                             <option value="">-- Pilih Buku --</option>
                             @foreach ($buku as $b)
-                                <option value="{{ $b->id_buku }}">
-                                    {{ $b->judul_buku }}
+                                <option value="{{ $b->id_buku }}" {{ $b->jml_buku == 0 ? 'disabled' : '' }}>
+                                    {{ $b->judul_buku }} (Stok: {{ $b->jml_buku }})
                                 </option>
                             @endforeach
                         </select>
 
-                        <input type="date" name="tgl_pinjam" class="form-control mb-2">
-                        <input type="date" name="tgl_kembali" class="form-control mb-2">
+                        <input type="date" name="tgl_pinjam" class="form-control mb-2" required>
+
+                        <!-- HAPUS tgl_kembali ❌ -->
 
                     </div>
 
@@ -155,5 +145,4 @@
             </form>
         </div>
     </div>
-
 @endsection

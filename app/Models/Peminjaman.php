@@ -11,15 +11,13 @@ class Peminjaman extends Model
 
 
     protected $table = 'peminjaman';
-    protected $primaryKey = 'kd_pinjam';
+    protected $primaryKey = 'id_buku';
     public $timestamps = false;
 
     protected $fillable = [
-        'id_anggota',
-        'id_buku',
         'nama_peminjam',
-        'tgl_pinjam',
-
+        'id_buku',
+        'tgl_pinjam'
     ];
 
     public function anggota()

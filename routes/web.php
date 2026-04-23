@@ -34,7 +34,13 @@ Route::middleware([])->group(function () {
     */
 
     Route::resource('buku', BukuController::class);
-    Route::resource('anggota', AnggotaController::class);
+    Route::get('/anggota', [AnggotaController::class, 'halaman']);
+    Route::post('/anggota/tambah', [AnggotaController::class, 'tambah']);
+
+    Route::get('/anggota/edit/{id}', [AnggotaController::class, 'edit']);
+    Route::post('/anggota/update/{id}', [AnggotaController::class, 'update']);
+
+    Route::get('/anggota/hapus/{id}', [AnggotaController::class, 'hapus']);
 
     /*
     |--------------------------------------------------------------------------

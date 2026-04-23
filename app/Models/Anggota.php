@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Anggota extends Model
 {
-    use HasFactory;
-
-    protected $table = 'public.anggota';
+    protected $table = 'anggota';
     protected $primaryKey = 'id_anggota';
+
     public $timestamps = false;
 
     protected $fillable = [
@@ -19,9 +17,4 @@ class Anggota extends Model
         'alamat',
         'tgl_lahir'
     ];
-
-    public function peminjaman()
-    {
-        return $this->hasMany(Peminjaman::class, 'id_anggota');
-    }
 }

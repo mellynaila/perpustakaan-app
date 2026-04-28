@@ -6,10 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Anggota extends Model
 {
-    protected $table = 'anggota';
+    protected $table = 'public.anggota';
     protected $primaryKey = 'id_anggota';
-
-    public $timestamps = false;
 
     protected $fillable = [
         'nama_anggota',
@@ -17,4 +15,9 @@ class Anggota extends Model
         'alamat',
         'tgl_lahir'
     ];
+
+    public function peminjaman()
+    {
+        return $this->hasMany(Peminjaman::class, 'id_anggota');
+    }
 }

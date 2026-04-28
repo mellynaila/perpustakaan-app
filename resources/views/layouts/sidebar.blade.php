@@ -7,14 +7,6 @@
     </a>
 
     <a href="/anggota" class="{{ request()->is('anggota*') ? 'active-menu' : '' }}">
-        👤 Anggota
-    </a>
-
-    <a href="/buku" class="{{ request()->is('buku*') ? 'active-menu' : '' }}">
-        📖 Buku
-    </a>
-
-    <a href="/peminjaman" class="{{ request()->is('peminjaman*') ? 'active-menu' : '' }}">
-        🔄 Peminjaman
+        👥 Menu Anggota
     </a>
 </div>

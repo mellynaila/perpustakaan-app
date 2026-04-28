@@ -1,27 +1,28 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\PeminjamanController;
+
 /*
 |--------------------------------------------------------------------------
-| AUTH (LOGIN)
+| AUTH
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [LoginController::class, 'loginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.process');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
+Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.process');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
 |--------------------------------------------------------------------------
 | ROUTE SETELAH LOGIN
 |--------------------------------------------------------------------------
 */
+
 Route::middleware([])->group(function () {
 
     // DASHBOARD
@@ -29,18 +30,22 @@ Route::middleware([])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | MENU ADMIN (LIHAT DATA PEMINJAMAN)
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/admin', [PeminjamanController::class, 'admin'])->name('admin');
+
+    /*
+    |--------------------------------------------------------------------------
     | DATA MASTER
     |--------------------------------------------------------------------------
     */
 
+    // BUKU
     Route::resource('buku', BukuController::class);
-    Route::get('/anggota', [AnggotaController::class, 'halaman']);
-    Route::post('/anggota/tambah', [AnggotaController::class, 'tambah']);
 
-    Route::get('/anggota/edit/{id}', [AnggotaController::class, 'edit']);
-    Route::post('/anggota/update/{id}', [AnggotaController::class, 'update']);
-
-    Route::get('/anggota/hapus/{id}', [AnggotaController::class, 'hapus']);
+    // ANGGOTA
+    Route::resource('anggota', AnggotaController::class);
 
     /*
     |--------------------------------------------------------------------------
@@ -48,5 +53,6 @@ Route::middleware([])->group(function () {
     |--------------------------------------------------------------------------
     */
 
+    // PEMINJAMAN
     Route::resource('peminjaman', PeminjamanController::class);
 });

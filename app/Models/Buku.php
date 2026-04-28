@@ -9,15 +9,15 @@ class Buku extends Model
 {
     use HasFactory;
 
-    protected $table = 'buku';
-    protected $primaryKey = 'id_buku';
+    protected $table = 'public.buku';
+    protected $primaryKey = 'id';
     public $timestamps = true;
 
     protected $fillable = [
         'judul_buku',
         'pengarang',
         'penerbit',
-        'thn_terbit',
+        'tahun_terbit',
         'jml_buku',
         'kategori',
         'status'
@@ -25,6 +25,6 @@ class Buku extends Model
 
     public function peminjaman()
     {
-        return $this->hasMany(Peminjaman::class, 'id_buku');
+        return $this->hasMany(Peminjaman::class, 'id_buku', 'id');
     }
 }

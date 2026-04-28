@@ -2,74 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Anggota;
 use Illuminate\Http\Request;
+use App\Models\Anggota;
 
 class AnggotaController extends Controller
 {
-    public function halaman()
+    // TAMPIL DATA
+    public function index()
     {
-        $data = Anggota::all();
-        return view('anggota', compact('data'));
+        $anggota = Anggota::all();
+        return view('anggota.index', compact('anggota'));
     }
 
-    public function tambah(Request $request)
+    // FORM TAMBAH
+    public function create()
     {
-        $request->validate([
-            'nama' => 'required',
-            'nim' => 'required',
-            'alamat' => 'required',
-            'tgl_lahir' => 'required|date'
-        ], [
-            'nama.required' => 'Nama wajib diisi!',
-            'nim.required' => 'NIM wajib diisi!',
-            'alamat.required' => 'Alamat wajib diisi!',
-            'tgl_lahir.required' => 'Tanggal lahir wajib diisi!'
-        ]);
-
-        Anggota::create([
-            'nama_anggota' => $request->nama,
-            'nim' => $request->nim,
-            'alamat' => $request->alamat,
-            'tgl_lahir' => $request->tgl_lahir
-        ]);
-
-        return redirect('/anggota')->with('success', 'Data berhasil ditambahkan!');
+        return view('anggota.create');
     }
 
+    // SIMPAN DATA
+    public function store(Request $request)
+    {
+        Anggota::create($request->all());
+        return redirect()->route('anggota.index')->with('success', 'Data berhasil ditambah');
+    }
+
+    // FORM EDIT
     public function edit($id)
     {
-        $anggota = \App\Models\Anggota::where('id_anggota', $id)->first();
-
-        if (!$anggota) {
-            return redirect('/anggota')->with('error', 'Data tidak ditemukan');
-        }
-
-        return view('edit_anggota', compact('anggota'));
+        $anggota = Anggota::findOrFail($id);
+        return view('anggota.edit', compact('anggota'));
     }
 
+    // UPDATE DATA
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'nama' => 'required',
-            'nim' => 'required',
-            'alamat' => 'required',
-            'tgl_lahir' => 'required|date'
-        ]);
+        $anggota = Anggota::findOrFail($id);
+        $anggota->update($request->all());
 
-        Anggota::where('id_anggota', $id)->update([
-            'nama_anggota' => $request->nama,
-            'nim' => $request->nim,
-            'alamat' => $request->alamat,
-            'tgl_lahir' => $request->tgl_lahir
-        ]);
-
-        return redirect('/anggota')->with('success', 'Data berhasil diupdate!');
+        return redirect()->route('anggota.index')->with('success', 'Data berhasil diupdate');
     }
 
-    public function hapus($id)
+    // HAPUS DATA
+    public function destroy($id)
     {
-        Anggota::where('id_anggota', $id)->delete();
-        return redirect('/anggota');
+        $anggota = Anggota::findOrFail($id);
+        $anggota->delete();
+
+        return redirect()->route('anggota.index')->with('success', 'Data berhasil dihapus');
     }
 }

@@ -85,8 +85,8 @@
 
             <h2>Login</h2>
 
-            @if(session('error'))
-            <p class="error">{{ session('error') }}</p>
+            @if (session('error'))
+                <p class="error">{{ session('error') }}</p>
             @endif
 
             <form method="POST" action="/login">

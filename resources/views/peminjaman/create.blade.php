@@ -1,44 +1,55 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3>Tambah Peminjaman</h3>
+    <div class="container">
+        <h3>Tambah Peminjaman</h3>
 
-    <form action="{{ route('peminjaman.store') }}" method="POST">
-        @csrf
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
 
-        <label>Anggota</label>
-        <select name="id_anggota" class="form-control">
-            @foreach ($anggota as $a)
-                <option value="{{ $a->id_anggota }}">
-                    {{ $a->nama_anggota }}
-                </option>
-            @endforeach
-        </select>
+        <form action="{{ url('/peminjaman') }}" method="POST">
+            @csrf
 
-        <br>
+            <!-- ANGGOTA -->
+            <div class="mb-3">
+                <label>Anggota</label>
+                <select name="id_anggota" class="form-control" required>
+                    <option value="">-- Pilih Anggota --</option>
+                    @foreach ($anggota as $a)
+                        <option value="{{ $a->id_anggota }}">
+                            {{ $a->nama_anggota }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
-        <label>Buku</label>
-        <select name="id_buku" class="form-control">
-            @foreach ($buku as $b)
-                <option value="{{ $b->id }}">
-                    {{ $b->judul_buku }} (stok: {{ $b->jml_buku }})
-                </option>
-            @endforeach
-        </select>
+            <!-- BUKU -->
+            <div class="mb-3">
+                <label>Buku</label>
+                <select name="id_buku" class="form-control">
+                    <option value="">-- Pilih Buku --</option>
+                    @foreach ($buku as $b)
+                        <option value="{{ $b->id }}">
+                            {{ $b->judul_buku }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
-        <br>
+            <!-- TANGGAL -->
+            <div class="mb-3">
+                <label>Tanggal Pinjam</label>
+                <input type="date" name="tanggal_pinjam" class="form-control" required>
+            </div>
 
-        <label>Tanggal Pinjam</label>
-        <input type="date" name="tanggal_pinjam" class="form-control">
+            <div class="mb-3">
+                <label>Tanggal Kembali</label>
+                <input type="date" name="tanggal_kembali" class="form-control" required>
+            </div>
 
-        <label>Tanggal Kembali</label>
-        <input type="date" name="tanggal_kembali" class="form-control">
-
-        <br>
-
-        <button class="btn btn-success">
-            Simpan
-        </button>
-
-    </form>
+            <button class="btn btn-primary">Simpan</button>
+            <a href="/peminjaman" class="btn btn-secondary">Kembali</a>
+        </form>
+    </div>
 @endsection

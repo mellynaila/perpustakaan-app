@@ -10,14 +10,12 @@ use Carbon\Carbon;
 
 class PeminjamanController extends Controller
 {
-    // LIST
     public function index()
     {
         $peminjaman = Peminjaman::with(['anggota', 'buku'])->get();
         return view('peminjaman.index', compact('peminjaman'));
     }
 
-    // FORM CREATE
     public function create()
     {
         $anggota = Anggota::all();
@@ -26,12 +24,11 @@ class PeminjamanController extends Controller
         return view('peminjaman.create', compact('anggota', 'buku'));
     }
 
-    // STORE
     public function store(Request $request)
     {
         $request->validate([
-            'id_anggota' => 'required',
-            'id_buku' => 'required',
+            'id_anggota' => 'required|integer|exists:anggota,id_anggota',
+            'id_buku' => 'required|integer|exists:buku,id',
             'tanggal_pinjam' => 'required|date',
             'tanggal_kembali' => 'required|date'
         ]);
@@ -43,8 +40,8 @@ class PeminjamanController extends Controller
         }
 
         Peminjaman::create([
-            'id_anggota' => $request->id_anggota,
-            'id_buku' => $request->id_buku,
+            'id_anggota' => (int) $request->id_anggota,
+            'id_buku' => (int) $request->id_buku,
             'tanggal_pinjam' => $request->tanggal_pinjam,
             'tanggal_kembali' => $request->tanggal_kembali,
             'status' => 'Dipinjam',
@@ -56,41 +53,67 @@ class PeminjamanController extends Controller
         return redirect('/peminjaman')->with('success', 'Peminjaman berhasil');
     }
 
-    // UPDATE (KEMBALIKAN + DENDA)
+    public function edit($id)
+    {
+        $peminjaman = Peminjaman::findOrFail($id);
+        $anggota = Anggota::all();
+        $buku = Buku::all();
+
+        return view('peminjaman.edit', compact('peminjaman', 'anggota', 'buku'));
+    }
+
     public function update(Request $request, $id)
     {
         $pinjam = Peminjaman::findOrFail($id);
 
-        $denda = $pinjam->denda; // default ambil yang lama
+        if (!$request->has('status')) {
+
+            $request->validate([
+                'id_anggota' => 'required|integer|exists:anggota,id_anggota',
+                'id_buku' => 'required|integer|exists:buku,id',
+                'tanggal_pinjam' => 'required|date',
+                'tanggal_kembali' => 'required|date'
+            ]);
+
+            $pinjam->update([
+                'id_anggota' => (int) $request->id_anggota,
+                'id_buku' => (int) $request->id_buku,
+                'tanggal_pinjam' => $request->tanggal_pinjam,
+                'tanggal_kembali' => $request->tanggal_kembali,
+            ]);
+
+            return redirect('/peminjaman')->with('success', 'Data berhasil diupdate');
+        }
+
+        $denda = 0;
 
         if ($request->status == 'Dikembalikan') {
 
             $today = Carbon::now();
             $tgl_kembali = Carbon::parse($pinjam->tanggal_kembali);
 
-            // HITUNG DENDA
             if ($today->gt($tgl_kembali)) {
                 $hari = $tgl_kembali->diffInDays($today);
                 $denda = $hari * 1000;
-            } else {
-                $denda = 0;
             }
 
-            // TAMBAH STOK (hanya sekali)
             if ($pinjam->status != 'Dikembalikan') {
-                Buku::find($pinjam->id_buku)->increment('jml_buku');
+                $buku = Buku::find($pinjam->id_buku);
+
+                if ($buku) {
+                    $buku->increment('jml_buku');
+                }
             }
         }
 
         $pinjam->update([
-            'status' => $request->status ?? $pinjam->status,
+            'status' => $request->status,
             'denda' => $denda
         ]);
 
         return redirect('/peminjaman')->with('success', 'Buku dikembalikan + denda dihitung');
     }
 
-    // DELETE
     public function destroy($id)
     {
         $pinjam = Peminjaman::findOrFail($id);
@@ -102,15 +125,5 @@ class PeminjamanController extends Controller
         $pinjam->delete();
 
         return redirect('/peminjaman')->with('success', 'Data dihapus');
-    }
-
-    // ADMIN MENU
-    public function admin()
-    {
-        $data = Peminjaman::with(['anggota', 'buku'])
-            ->where('status', 'Dipinjam')
-            ->get();
-
-        return view('admin.index', compact('data'));
     }
 }

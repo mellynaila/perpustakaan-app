@@ -23,9 +23,9 @@ class AuthController extends Controller
             return back()->with('error', 'User tidak ditemukan');
         }
 
-       if ($request->password != $user->password) {
-    return back()->with('error', 'Password salah');
-       }
+        if ($request->password != $user->password) {
+            return back()->with('error', 'Password salah');
+        }
 
         session([
             'user_id' => $user->id,

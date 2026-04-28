@@ -8,31 +8,25 @@ use Carbon\Carbon;
 class Peminjaman extends Model
 {
     protected $table = 'public.peminjaman';
-    protected $primaryKey = 'id_anggota';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'id_anggota',
-        'id_buku',
+        'id',
         'tanggal_pinjam',
         'tanggal_kembali',
-        'status',
-        'denda'
+        'denda',
+        'status'
     ];
-
-    /*
-    |--------------------------------------------------------------------------
-    | RELASI
-    |--------------------------------------------------------------------------
-    */
 
     public function anggota()
     {
-        return $this->belongsTo(Anggota::class, 'id_anggota');
+        return $this->belongsTo(Anggota::class, 'id_anggota', 'id_anggota');
     }
 
     public function buku()
     {
-        return $this->belongsTo(Buku::class, 'id_buku');
+        return $this->belongsTo(Buku::class, 'id_buku', 'id');
     }
 
     /*

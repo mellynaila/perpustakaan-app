@@ -8,6 +8,7 @@ class Anggota extends Model
 {
     protected $table = 'public.anggota';
     protected $primaryKey = 'id_anggota';
+    public $timestamps = false;
 
     protected $fillable = [
         'nama_anggota',
@@ -18,6 +19,6 @@ class Anggota extends Model
 
     public function peminjaman()
     {
-        return $this->hasMany(Peminjaman::class, 'id_anggota');
+        return $this->hasMany(Peminjaman::class);
     }
 }

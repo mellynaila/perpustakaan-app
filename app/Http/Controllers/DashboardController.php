@@ -14,7 +14,7 @@ class DashboardController extends Controller
         $totalBuku = Buku::count();
         $totalPeminjaman = Peminjaman::count();
 
-        return view('dashboard', compact(
+        return view('admin.dashboard', compact(
             'totalAnggota',
             'totalBuku',
             'totalPeminjaman'

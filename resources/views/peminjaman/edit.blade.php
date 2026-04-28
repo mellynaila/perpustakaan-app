@@ -1,90 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Peminjaman</title>
+@section('content')
+    <h3>Edit Peminjaman</h3>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <form action="{{ route('peminjaman.update', $peminjaman->id) }}" method="POST">
+        @csrf
+        @method('PUT')
 
-    <style>
-        body {
-            background: #f4f6f9;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        .card {
-            border-radius: 15px;
-            transition: 0.3s;
-        }
-
-        .card:hover {
-            transform: scale(1.01);
-        }
-
-        .card-header {
-            border-radius: 15px 15px 0 0 !important;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-
-            <div class="col-md-6">
-
-                <div class="card shadow-lg border-0">
-
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">✏️ Edit Status Peminjaman</h5>
-                    </div>
-
-                    <div class="card-body p-4">
-
-                        <!-- FORM -->
-                        <form action="{{ route('peminjaman.update', $peminjaman->id_peminjaman) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-
-                            <!-- STATUS -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold">Status Peminjaman</label>
-                                <select name="status" class="form-select">
-                                    <option value="Dipinjam" {{ $peminjaman->status == 'Dipinjam' ? 'selected' : '' }}>
-                                        Dipinjam
-                                    </option>
-
-                                    <option value="Dikembalikan"
-                                        {{ $peminjaman->status == 'Dikembalikan' ? 'selected' : '' }}>
-                                        Dikembalikan
-                                    </option>
-                                </select>
-                            </div>
-
-                            <!-- BUTTON -->
-                            <div class="d-flex justify-content-between mt-4">
-                                <a href="/peminjaman" class="btn btn-secondary">
-                                    ← Kembali
-                                </a>
-
-                                <button type="submit" class="btn btn-primary px-4">
-                                    Update
-                                </button>
-                            </div>
-
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-
+        <div class="mb-2">
+            <label>Anggota</label>
+            <select name="id_anggota" class="form-control">
+                @foreach ($anggota as $a)
+                    <option value="{{ $a->id }}" {{ $a->id == $peminjaman->id_anggota ? 'selected' : '' }}>
+                        {{ $a->nama }}
+                    </option>
+                @endforeach
+            </select>
         </div>
-    </div>
 
-</body>
+        <div class="mb-2">
+            <label>Buku</label>
+            <select name="id_buku" class="form-control">
+                @foreach ($buku as $b)
+                    <option value="{{ $b->id }}" {{ $b->id == $peminjaman->id ? 'selected' : '' }}>
+                        {{ $b->judul_buku }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
 
-</html>
+        <div class="mb-2">
+            <label>Tanggal Pinjam</label>
+            <input type="date" name="tanggal_pinjam" class="form-control" value="{{ $peminjaman->tanggal_pinjam }}">
+        </div>
+
+        <div class="mb-2">
+            <label>Tanggal Kembali</label>
+            <input type="date" name="tanggal_kembali" class="form-control" value="{{ $peminjaman->tanggal_kembali }}">
+        </div>
+
+        <button class="btn btn-primary">Update</button>
+        <a href="/peminjaman" class="btn btn-secondary">Kembali</a>
+    </form>
+@endsection

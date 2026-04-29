@@ -7,15 +7,18 @@ use App\Models\Buku;
 
 class BukuController extends Controller
 {
+    // untuk ADMIN
     public function index()
     {
-        $data = Buku::all();
-        return view('buku.index', compact('data'));
+        $buku = Buku::all();
+        return view('buku.index', compact('buku'));
     }
 
-    public function create()
+    // untuk ANGGOTA
+    public function indexAnggota()
     {
-        return view('buku.create');
+        $buku = Buku::where('stok', '>', 0)->get();
+        return view('anggota.index', compact('buku'));
     }
 
     public function store(Request $request)

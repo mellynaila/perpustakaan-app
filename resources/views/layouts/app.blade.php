@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title')</title>
+    <title>Perpustakaan</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -13,58 +13,100 @@
         }
 
         .sidebar {
-            height: 100vh;
-            background: #343a40;
+            width: 220px;
+            background: #0f172a;
             color: white;
-            padding: 20px;
+            min-height: 100vh;
         }
 
-        .sidebar a {
-            color: white;
-            display: block;
-            padding: 10px;
-            margin-bottom: 8px;
-            border-radius: 5px;
-            text-decoration: none;
+        .navbar-neon {
+            background: #ffffff;
+            border-bottom: 2px solid #39ff14;
+        }
+
+        .btn-white {
+            background: white;
+            border: 1px solid #ccc;
+        }
+
+        /* DASHBOARD CARD */
+        .card-modern {
+            border-radius: 16px;
+            padding: 20px;
+            color: #fff;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
             transition: 0.3s;
         }
 
-        .sidebar a:hover {
-            background: #495057;
+        .card-modern:hover {
+            transform: translateY(-5px);
         }
 
-        .active-menu {
-            background: #0d6efd;
-            font-weight: bold;
+        .card-modern.blue {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
         }
 
-        .content {
-            padding: 20px;
+        .card-modern.green {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+
+        .card-modern.yellow {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+        }
+
+        .icon-box {
+            font-size: 28px;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 12px;
+            border-radius: 10px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container-fluid">
-        <div class="row">
+    <div class="d-flex">
 
-            @include('layouts.sidebar')
+        <!-- SIDEBAR -->
+        <div class="sidebar p-3">
+            <h4>📚 Perpus</h4>
+            <hr style="border-color:#39ff14;">
 
-            <div class="col-md-10">
+            {{-- pilih sidebar sesuai role --}}
+            @if (auth()->user()->role == 'admin')
+                @include('layouts.sidebar-admin')
+            @else
+                @include('layouts.sidebar-anggota')
+            @endif
+        </div>
 
-                @include('layouts.navbar')
+        <!-- CONTENT -->
+        <div class="flex-grow-1">
 
-                <div class="content">
-                    @yield('content')
+            <!-- NAVBAR -->
+            <nav class="navbar navbar-neon px-3 d-flex justify-content-between">
+                <span class="navbar-brand">📚 Sistem Perpustakaan Czennie 127</span>
+
+                <div class="d-flex align-items-center gap-3">
+                    <span class="fw-bold text-dark">
+                        Halo, {{ auth()->user()->name }}
+                    </span>
+
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button class="btn btn-white btn-sm">🔓 Logout</button>
+                    </form>
                 </div>
+            </nav>
 
+            <!-- ISI HALAMAN -->
+            <div class="p-4">
+                @yield('content')
             </div>
 
         </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
 
 </body>
 

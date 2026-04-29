@@ -1,42 +1,31 @@
-@extends('layouts.app')
+@extends('layouts.anggota')
 
 @section('content')
+    <h3>📚 Daftar Buku</h3>
 
-<h3>👥 Data Anggota</h3>
-
-<a href="{{ route('anggota.create') }}" class="btn btn-primary mb-3">+ Tambah</a>
-
-<table class="table table-bordered">
-    <thead>
+    <table class="table">
         <tr>
-            <th>No</th>
-            <th>Nama</th>
-            <th>NIM</th>
-            <th>Alamat</th>
-            <th>Tanggal Lahir</th>
+            <th>Judul</th>
+            <th>Penulis</th>
+            <th>Penerbit</th>
+            <th>Stok</th>
             <th>Aksi</th>
         </tr>
-    </thead>
-    <tbody>
-        @foreach($anggota as $a)
-        <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $a->nama_anggota }}</td>
-            <td>{{ $a->nim }}</td>
-            <td>{{ $a->alamat }}</td>
-            <td>{{ $a->tgl_lahir }}</td>
-            <td>
-                <a href="{{ route('anggota.edit', $a->id_anggota) }}" class="btn btn-warning btn-sm">Edit</a>
 
-                <form action="{{ route('anggota.destroy', $a->id_anggota) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-danger btn-sm">Hapus</button>
-                </form>
-            </td>
-        </tr>
+        @foreach ($buku as $b)
+            <tr>
+                <td>{{ $b->judul }}</td>
+                <td>{{ $b->penulis }}</td>
+                <td>{{ $b->penerbit }}</td>
+                <td>{{ $b->stok }}</td>
+                <td>
+                    <form action="/pinjam/{{ $b->id }}" method="POST">
+                        @csrf
+                        <button class="btn btn-success btn-sm">Pinjam</button>
+                    </form>
+                </td>
+            </tr>
         @endforeach
-    </tbody>
-</table>
 
+    </table>
 @endsection

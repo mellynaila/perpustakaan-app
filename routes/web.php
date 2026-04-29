@@ -15,44 +15,41 @@ use App\Http\Controllers\PeminjamanController;
 
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 
 /*
 |--------------------------------------------------------------------------
-| ROUTE SETELAH LOGIN
+| ADMIN
 |--------------------------------------------------------------------------
 */
+Route::middleware(['auth', 'role:admin'])->group(function () {
 
-Route::middleware([])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
 
-    // DASHBOARD
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    /*
-    |--------------------------------------------------------------------------
-    | MENU ADMIN (LIHAT DATA PEMINJAMAN)
-    |--------------------------------------------------------------------------
-    */
-    Route::get('/admin', [PeminjamanController::class, 'admin'])->name('admin');
-
-    /*
-    |--------------------------------------------------------------------------
-    | DATA MASTER
-    |--------------------------------------------------------------------------
-    */
-
-    // BUKU
     Route::resource('buku', BukuController::class);
-
-    // ANGGOTA
     Route::resource('anggota', AnggotaController::class);
-
-    /*
-    |--------------------------------------------------------------------------
-    | TRANSAKSI
-    |--------------------------------------------------------------------------
-    */
-
-    // PEMINJAMAN
     Route::resource('peminjaman', PeminjamanController::class);
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| ANGGOTA
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:anggota'])->group(function () {
+
+    Route::get('/dashboard-anggota', [DashboardController::class, 'anggota'])
+        ->name('anggota.dashboard');
+
+    // ganti biar tidak bentrok dengan admin
+    Route::get('/buku-list', [BukuController::class, 'indexAnggota'])
+        ->name('anggota.buku');
+
+    Route::post('/pinjam/{id}', [PeminjamanController::class, 'pinjam'])
+        ->name('pinjam.buku');
+
+    Route::get('/riwayat', [PeminjamanController::class, 'riwayat'])
+        ->name('riwayat.index');
 });

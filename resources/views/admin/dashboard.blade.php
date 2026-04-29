@@ -1,32 +1,51 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3 class="mb-4 fw-bold">📊 Dashboard Perpustakaan</h3>
+    <div class="content-area">
 
-    <div class="row g-4">
+        <h3 class="mb-4">📊 Dashboard Perpustakaan Czennie 127</h3>
 
-        <!-- Anggota -->
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 bg-primary text-white p-4">
-                <small>Total Anggota</small>
-                <h1 class="fw-bold mt-2">{{ $totalAnggota }}</h1>
+        <div class="row g-4">
+
+            <!-- ANGGOTA -->
+            <div class="col-md-4">
+                <div class="card-modern blue">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="small mb-1">Total Anggota</p>
+                            <h1>{{ $totalAnggota }}</h1>
+                        </div>
+                        <div class="icon-box">👥</div>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- Buku -->
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 bg-success text-white p-4">
-                <small>Total Buku</small>
-                <h1 class="fw-bold mt-2">{{ $totalBuku }}</h1>
+            <!-- BUKU -->
+            <div class="col-md-4">
+                <div class="card-modern green">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="small mb-1">Total Buku</p>
+                            <h1>{{ $totalBuku }}</h1>
+                        </div>
+                        <div class="icon-box">📚</div>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- Peminjaman -->
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4 bg-warning p-4">
-                <small>Total Peminjaman</small>
-                <h1 class="fw-bold mt-2">{{ $totalPeminjaman }}</h1>
+            <!-- PEMINJAMAN -->
+            <div class="col-md-4">
+                <div class="card-modern yellow">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="small mb-1">Total Peminjaman</p>
+                            <h1>{{ $totalPeminjaman }}</h1>
+                        </div>
+                        <div class="icon-box">🔄</div>
+                    </div>
+                </div>
             </div>
+
         </div>
 
     </div>

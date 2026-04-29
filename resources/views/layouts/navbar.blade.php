@@ -1,7 +1,12 @@
-<nav class="navbar navbar-dark bg-dark px-3">
+<nav class="navbar navbar-success bg-success px-3 d-flex justify-content-between">
+
     <span class="navbar-brand">📚 Sistem Perpustakaan</span>
 
-    <div class="text-white">
-        Halo, Admin 👋
-    </div>
+    <form action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button class="btn btn-outline-light btn-sm">
+            Logout
+        </button>
+    </form>
+
 </nav>

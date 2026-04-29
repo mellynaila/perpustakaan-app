@@ -23,8 +23,17 @@ class AnggotaController extends Controller
     // SIMPAN DATA
     public function store(Request $request)
     {
+        $request->validate([
+            'nama_anggota' => 'required',
+            'nim' => 'required|unique:anggota,nim',
+            'alamat' => 'nullable',
+            'tgl_lahir' => 'nullable|date'
+        ]);
+
         Anggota::create($request->all());
-        return redirect()->route('anggota.index')->with('success', 'Data berhasil ditambah');
+
+        return redirect()->route('anggota.index')
+            ->with('success', 'Data berhasil ditambah');
     }
 
     // FORM EDIT
@@ -38,9 +47,16 @@ class AnggotaController extends Controller
     public function update(Request $request, $id)
     {
         $anggota = Anggota::findOrFail($id);
+
+        $request->validate([
+            'nama_anggota' => 'required',
+            'nim' => 'required|unique:anggota,nim,' . $id . ',id_anggota',
+        ]);
+
         $anggota->update($request->all());
 
-        return redirect()->route('anggota.index')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('anggota.index')
+            ->with('success', 'Data berhasil diupdate');
     }
 
     // HAPUS DATA
@@ -49,6 +65,7 @@ class AnggotaController extends Controller
         $anggota = Anggota::findOrFail($id);
         $anggota->delete();
 
-        return redirect()->route('anggota.index')->with('success', 'Data berhasil dihapus');
+        return redirect()->route('anggota.index')
+            ->with('success', 'Data berhasil dihapus');
     }
 }

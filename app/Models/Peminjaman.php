@@ -7,17 +7,24 @@ use Carbon\Carbon;
 
 class Peminjaman extends Model
 {
-    protected $table = 'public.peminjaman';
-    protected $primaryKey = 'id';
+    protected $table = 'peminjaman';
+    protected $primaryKey = 'id_peminjaman';
 
     protected $fillable = [
         'id_anggota',
-        'id',
+        'id_buku',
         'tanggal_pinjam',
         'tanggal_kembali',
-        'denda',
-        'status'
+        'tgl_dikembalikan',
+        'status',
+        'denda'
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELASI
+    |--------------------------------------------------------------------------
+    */
 
     public function anggota()
     {
@@ -26,31 +33,29 @@ class Peminjaman extends Model
 
     public function buku()
     {
-        return $this->belongsTo(Buku::class, 'id_buku', 'id');
+        return $this->belongsTo(Buku::class, 'id_buku', 'id_buku');
     }
 
     /*
     |--------------------------------------------------------------------------
-    | FITUR TAMBAHAN (TANPA KOLOM DATABASE)
+    | ACCESSOR (TANPA KOLOM DATABASE)
     |--------------------------------------------------------------------------
     */
 
     // Hitung hari keterlambatan
     public function getTerlambatAttribute()
     {
-        $today = Carbon::now();
+        if (!$this->tanggal_kembali) return 0;
+
         $tgl_kembali = Carbon::parse($this->tanggal_kembali);
 
-        if ($today->gt($tgl_kembali)) {
-            return $today->diffInDays($tgl_kembali);
-        }
+        // kalau sudah dikembalikan pakai tanggal itu, kalau belum pakai hari ini
+        $tgl = $this->tgl_dikembalikan
+            ? Carbon::parse($this->tgl_dikembalikan)
+            : Carbon::today();
 
-        return 0;
-    }
-
-    // Hitung denda (1000/hari)
-    public function getDendaAttribute()
-    {
-        return $this->terlambat * 5000;
+        return $tgl->gt($tgl_kembali)
+            ? $tgl_kembali->diffInDays($tgl)
+            : 0;
     }
 }

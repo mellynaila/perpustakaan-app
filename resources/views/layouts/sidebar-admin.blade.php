@@ -18,4 +18,10 @@
         </a>
     </li>
 
+    <li>
+        <a href="/peminjaman" class="nav-link {{ request()->is('peminjaman*') ? 'active' : '' }}">
+            Peminjaman
+        </a>
+    </li>
+
 </ul>

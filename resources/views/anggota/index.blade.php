@@ -12,14 +12,14 @@
             <th>Aksi</th>
         </tr>
 
-        @foreach ($buku as $b)
+        @foreach ($anggota as $item)
             <tr>
-                <td>{{ $b->judul }}</td>
-                <td>{{ $b->penulis }}</td>
-                <td>{{ $b->penerbit }}</td>
-                <td>{{ $b->stok }}</td>
+                <td>{{ $item->judul }}</td>
+                <td>{{ $item->penulis }}</td>
+                <td>{{ $item->penerbit }}</td>
+                <td>{{ $item->stok }}</td>
                 <td>
-                    <form action="/pinjam/{{ $b->id }}" method="POST">
+                    <form action="/pinjam/{{ $anggota->id_anggota }}" method="POST">
                         @csrf
                         <button class="btn btn-success btn-sm">Pinjam</button>
                     </form>

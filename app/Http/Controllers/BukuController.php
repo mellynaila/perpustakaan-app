@@ -14,14 +14,7 @@ class BukuController extends Controller
         return view('buku.index', compact('buku'));
     }
 
-    // ANGGOTA
-    public function indexAnggota()
-    {
-        $buku = Buku::where('stok', '>', 0)->get();
-        return view('anggota.index', compact('buku'));
-    }
-
-    // ✅ TAMBAHAN (WAJIB untuk resource)
+    // TAMBAHAN (WAJIB untuk resource)
     public function create()
     {
         return view('buku.create');
@@ -35,7 +28,7 @@ class BukuController extends Controller
             'penulis' => 'required',
             'penerbit' => 'required',
             'tahun_terbit' => 'required',
-            'jml_buku' => 'required|numeric',
+            'stok' => 'required|numeric',
             'kategori' => 'required',
             'status' => 'required'
         ]);
@@ -61,7 +54,7 @@ class BukuController extends Controller
             'penulis' => 'required',        // 🔧 disamakan
             'penerbit' => 'required',
             'tahun_terbit' => 'required',
-            'jml_buku' => 'required|numeric',
+            'stok' => 'required|numeric',
             'kategori' => 'required',
             'status' => 'required'
         ]);

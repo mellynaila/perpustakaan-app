@@ -7,14 +7,14 @@
     </li>
 
     <li>
-        <a href="/buku" class="nav-link {{ request()->is('buku*') ? 'active' : '' }}">
-            Kelola Buku
+        <a href="/anggota" class="nav-link {{ request()->is('anggota*') ? 'active' : '' }}">
+            Daftar Anggota
         </a>
     </li>
 
     <li>
-        <a href="/anggota" class="nav-link {{ request()->is('anggota*') ? 'active' : '' }}">
-            Data Anggota
+        <a href="/buku" class="nav-link {{ request()->is('buku*') ? 'active' : '' }}">
+            Kelola Buku
         </a>
     </li>
 

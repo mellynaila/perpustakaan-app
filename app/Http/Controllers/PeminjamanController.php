@@ -3,40 +3,126 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use App\Models\Peminjaman;
 use App\Models\Buku;
+use App\Models\Anggota;
+use Carbon\Carbon;
 
 class PeminjamanController extends Controller
 {
+    // =========================
+    // ADMIN - LIST
+    // =========================
+    public function index()
+    {
+        $peminjaman = Peminjaman::with(['anggota', 'buku'])->get();
+        return view('peminjaman.index', compact('peminjaman'));
+    }
+
+    // =========================
+    // ADMIN - CREATE
+    // =========================
+    public function create()
+    {
+        $anggota = Anggota::all();
+        $buku = Buku::all();
+        return view('peminjaman.create', compact('anggota', 'buku'));
+    }
+
+    // =========================
+    // ADMIN - STORE
+    // =========================
+    public function store(Request $request)
+    {
+        $request->validate([
+            'id_anggota' => 'required',
+            'id_buku' => 'required',
+        ]);
+
+        $buku = Buku::findOrFail($request->id_buku);
+
+        if ($buku->stok <= 0) {
+            return back()->with('error', 'Stok habis');
+        }
+
+        Peminjaman::create([
+            'id_anggota' => $request->id_anggota,
+            'id_buku' => $request->id_buku,
+            'tanggal_pinjam' => now(),
+            'tanggal_kembali' => now()->addDays(7),
+            'status' => 'dipinjam',
+            'denda' => 0
+        ]);
+
+        $buku->decrement('stok');
+
+        return redirect()->route('peminjaman.index')
+            ->with('success', 'Berhasil ditambahkan');
+    }
+
+    // =========================
+    // ADMIN - KEMBALIKAN
+    // =========================
+    public function update(Request $request, $id)
+    {
+        $p = Peminjaman::with('buku')->findOrFail($id);
+
+        $tgl_kembali = Carbon::now();
+        $deadline = Carbon::parse($p->tanggal_kembali);
+
+        $hari_telat = 0;
+        if ($tgl_kembali->greaterThan($deadline)) {
+            $hari_telat = $deadline->diffInDays($tgl_kembali);
+        }
+
+        $denda = $hari_telat * 1000;
+
+        $p->update([
+            'status' => 'dikembalikan',
+            'tgl_dikembalikan' => $tgl_kembali,
+            'denda' => $denda,
+        ]);
+
+        $p->buku->increment('stok');
+
+        return back()->with('success', 'Dikembalikan. Denda: Rp ' . number_format($denda));
+    }
+
+    // =========================
+    // ANGGOTA - PINJAM
+    // =========================
     public function pinjam($id)
     {
-        // cek stok dulu (biar aman)
         $buku = Buku::findOrFail($id);
 
         if ($buku->stok <= 0) {
-            return back()->with('error', 'Stok buku habis');
+            return back()->with('error', 'Stok habis');
         }
 
         Peminjaman::create([
             'id_anggota' => Auth::id(),
             'id_buku' => $id,
             'tanggal_pinjam' => now(),
+            'tanggal_kembali' => Carbon::now()->addDays(7),
             'status' => 'dipinjam',
-            'denda' => 0
+            'denda' => 0,
         ]);
 
-        // kurangi stok
         $buku->decrement('stok');
 
-        return back()->with('success', 'Buku berhasil dipinjam');
+        // langsung ke laporan
+        return redirect()->route('laporan.index')
+            ->with('success', 'Buku berhasil dipinjam');
     }
 
-    public function riwayat()
+    // =========================
+    // ANGGOTA - LAPORAN
+    // =========================
+    public function laporan()
     {
-        $data = Peminjaman::where('id_anggota', Auth::id())
-            ->with('buku')
-            ->get();
+        $data = Peminjaman::with(['anggota', 'buku'])->first(); // hanya 1
 
-        return view('anggota.riwayat-peminjaman', compact('data'));
+        return view('laporan.index', compact('data'));
     }
 }

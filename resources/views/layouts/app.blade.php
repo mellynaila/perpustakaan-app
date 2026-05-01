@@ -3,9 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Perpustakaan</title>
+    <title>Perpustakaan 시즈니</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
 
     <style>
         body {
@@ -69,7 +70,10 @@
 
         <!-- SIDEBAR -->
         <div class="sidebar p-3">
-            <h4>📚 Perpus</h4>
+            <h4 class="d-flex align-items-center gap-2">
+                <img src="{{ asset('images/logonct.png') }}" style="height:50px; width:auto; object-fit:contain;">
+                Perpus
+            </h4>
             <hr style="border-color:#39ff14;">
 
             {{-- pilih sidebar sesuai role --}}
@@ -85,7 +89,10 @@
 
             <!-- NAVBAR -->
             <nav class="navbar navbar-neon px-3 d-flex justify-content-between">
-                <span class="navbar-brand">📚 Sistem Perpustakaan Czennie 127</span>
+                <span class="navbar-brand d-flex align-items-center gap-2">
+                    <img src="{{ asset('images/logonct.png') }}" style="height:60px; width:auto; object-fit:contain;">
+                    Sistem Perpustakaan Czennie 127
+                </span>
 
                 <div class="d-flex align-items-center gap-3">
                     <span class="fw-bold text-dark">
@@ -94,7 +101,10 @@
 
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button class="btn btn-white btn-sm">🔓 Logout</button>
+                        <button class="btn btn-white btn-sm logout-btn">
+                            <img src="{{ asset('images/gembok.png') }}" width="18">
+                            <span class="fw-bold">LOGOUT</span>
+                        </button>
                     </form>
                 </div>
             </nav>

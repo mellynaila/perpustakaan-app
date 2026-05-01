@@ -4,11 +4,7 @@
     <div class="container">
         <h3>Tambah Peminjaman</h3>
 
-        @if (session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-        @endif
-
-        <form action="{{ url('/peminjaman') }}" method="POST">
+        <form action="{{ route('peminjaman.store') }}" method="POST">
             @csrf
 
             <!-- ANGGOTA -->
@@ -27,29 +23,35 @@
             <!-- BUKU -->
             <div class="mb-3">
                 <label>Buku</label>
-                <select name="id_buku" class="form-control">
+                <select name="id_buku" class="form-control" required>
                     <option value="">-- Pilih Buku --</option>
                     @foreach ($buku as $b)
-                        <option value="{{ $b->id }}">
-                            {{ $b->judul_buku }}
+                        <option value="{{ $b->id_buku }}">
+                            {{ $b->judul }}
                         </option>
                     @endforeach
                 </select>
             </div>
 
-            <!-- TANGGAL -->
+            <!-- TANGGAL PINJAM -->
             <div class="mb-3">
                 <label>Tanggal Pinjam</label>
-                <input type="date" name="tanggal_pinjam" class="form-control" required>
+                <input type="date" name="tanggal_pinjam" class="form-control" value="{{ date('Y-m-d') }}" required>
             </div>
 
+            <!-- DEADLINE -->
             <div class="mb-3">
-                <label>Tanggal Kembali</label>
-                <input type="date" name="tanggal_kembali" class="form-control" required>
+                <label>Deadline</label>
+                <input type="date" name="tanggal_kembali" class="form-control"
+                    value="{{ date('Y-m-d', strtotime('+7 days')) }}" required>
             </div>
 
-            <button class="btn btn-primary">Simpan</button>
-            <a href="/peminjaman" class="btn btn-secondary">Kembali</a>
+            <div class="alert alert-info">
+                Denda Rp 1000 / hari jika terlambat
+            </div>
+
+            <button class="btn btn-success">Simpan</button>
+            <a href="{{ route('peminjaman.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 @endsection

@@ -1,112 +1,136 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3>Data Peminjaman</h3>
+    <div class="container">
+        <h3 class="mb-3">Data Peminjaman</h3>
 
-    <a href="{{ route('peminjaman.create') }}" class="btn btn-primary mb-3">
-        Tambah Peminjaman
-    </a>
+        {{-- ALERT --}}
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
-    <table class="table table-bordered table-hover align-middle text-center">
-        <thead class="table-dark">
-            <tr>
-                <th>No</th>
-                <th>Anggota</th>
-                <th>Buku</th>
-                <th>Pinjam</th>
-                <th>Deadline</th>
-                <th>Dikembalikan</th>
-                <th>Status</th>
-                <th>Denda</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
 
-        <tbody>
-            @forelse ($peminjaman as $p)
+        <a href="{{ route('peminjaman.create') }}" class="btn btn-primary mb-3">
+            + Tambah Peminjaman
+        </a>
+
+        <table class="table table-bordered table-hover align-middle text-center">
+            <thead class="table-dark">
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <th>No</th>
+                    <th>Anggota</th>
+                    <th>Buku</th>
+                    <th>Tanggal Pinjam</th>
+                    <th>Deadline</th>
+                    <th>Dikembalikan</th>
+                    <th>Status</th>
+                    <th>Denda</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
 
-                    {{-- ANGGOTA --}}
-                    <td class="text-start">
-                        {{ $p->anggota->nama_anggota ?? '-' }}
-                    </td>
+            <tbody>
+                @forelse ($peminjaman as $p)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
 
-                    {{-- BUKU --}}
-                    <td class="text-start">
-                        {{ $p->buku->judul_buku ?? '-' }}
-                    </td>
+                        {{-- ANGGOTA --}}
+                        <td class="text-start">
+                            {{ $p->anggota->nama_anggota ?? '-' }}
+                        </td>
 
-                    {{-- TANGGAL --}}
-                    <td>{{ date('d M Y', strtotime($p->tanggal_pinjam)) }}</td>
-                    <td>{{ date('d M Y', strtotime($p->tanggal_kembali)) }}</td>
-                    <td>
-                        {{ $p->tgl_dikembalikan ? date('d M Y', strtotime($p->tgl_dikembalikan)) : '-' }}
-                    </td>
+                        {{-- BUKU --}}
+                        <td class="text-start">
+                            {{ $p->buku->judul ?? '-' }}
+                        </td>
 
-                    {{-- STATUS --}}
-                    <td>
-                        @if ($p->status == 'Dikembalikan')
-                            <span class="badge bg-success px-3">Dikembalikan</span>
-                        @elseif($p->status == 'Dipinjam')
-                            <span class="badge bg-warning text-dark px-3">Dipinjam</span>
-                        @else
-                            <span class="badge bg-secondary px-3">-</span>
-                        @endif
-                    </td>
+                        {{-- TANGGAL --}}
+                        <td>
+                            {{ $p->tanggal_pinjam ? date('d M Y', strtotime($p->tanggal_pinjam)) : '-' }}
+                        </td>
 
-                    {{-- DENDA --}}
-                    <td>
-                        @php
-                            $denda = (int) $p->denda;
-                        @endphp
+                        <td>
+                            {{ $p->tanggal_kembali ? date('d M Y', strtotime($p->tanggal_kembali)) : '-' }}
+                        </td>
 
-                        @if ($denda > 0)
-                            <span class="text-danger fw-bold">
-                                Rp {{ number_format($denda, 0, ',', '.') }}
-                            </span>
-                        @else
-                            <span class="text-muted">-</span>
-                        @endif
-                    </td>
+                        <td>
+                            {{ $p->tgl_dikembalikan ? date('d M Y', strtotime($p->tgl_dikembalikan)) : '-' }}
+                        </td>
 
-                    {{-- AKSI --}}
-                    <td>
-                        <a href="{{ route('peminjaman.edit', $p->id) }}" class="btn btn-warning btn-sm mb-1">
-                            Edit
-                        </a>
+                        {{-- STATUS --}}
+                        <td>
+                            @if ($p->status == 'dikembalikan')
+                                <span class="badge bg-success px-3">Dikembalikan</span>
+                            @elseif($p->status == 'dipinjam')
+                                <span class="badge bg-warning text-dark px-3">Dipinjam</span>
+                            @else
+                                <span class="badge bg-secondary px-3">-</span>
+                            @endif
+                        </td>
 
-                        @if ($p->status == 'Dipinjam')
-                            <form action="{{ route('peminjaman.update', $p->id) }}" method="POST">
+                        {{-- DENDA --}}
+                        <td>
+                            @php
+                                $denda = (int) $p->denda;
+                            @endphp
+
+                            @if ($denda > 0)
+                                <span class="text-danger fw-bold">
+                                    Rp {{ number_format($denda, 0, ',', '.') }}
+                                </span>
+                            @else
+                                <span class="text-muted">-</span>
+                            @endif
+                        </td>
+
+                        {{-- AKSI --}}
+                        <td>
+
+                            {{-- EDIT --}}
+                            <a href="{{ route('peminjaman.edit', $p->id_peminjaman) }}"
+                                class="btn btn-sm btn-warning btn-action">
+                                Edit
+                            </a>
+
+                            {{-- KEMBALIKAN --}}
+                            @if ($p->status == 'dipinjam')
+                                <form action="{{ route('peminjaman.update', $p->id_peminjaman) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <input type="hidden" name="status" value="dikembalikan">
+
+                                    <button class="btn btn-success btn-sm mb-1"
+                                        onclick="return confirm('Kembalikan buku ini?')">
+                                        Kembalikan
+                                    </button>
+                                </form>
+                            @endif
+
+                            {{-- HAPUS --}}
+                            <form action="{{ route('peminjaman.destroy', $p->id_peminjaman) }}" method="POST">
                                 @csrf
-                                @method('PUT')
-                                <input type="hidden" name="status" value="Dikembalikan">
+                                @method('DELETE')
 
-                                <button class="btn btn-success btn-sm mb-1"
-                                    onclick="return confirm('Kembalikan buku ini?')">
-                                    Kembalikan
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('Hapus data?')">
+                                    Hapus
                                 </button>
                             </form>
-                        @endif
 
-                        <form action="{{ route('peminjaman.destroy', $p->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
+                        </td>
+                    </tr>
 
-                            <button class="btn btn-danger btn-sm" onclick="return confirm('Hapus data?')">
-                                Hapus
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-
-            @empty
-                <tr>
-                    <td colspan="9" class="text-center text-muted">
-                        Data peminjaman belum ada
-                    </td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+                @empty
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">
+                            Data peminjaman belum ada
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 @endsection

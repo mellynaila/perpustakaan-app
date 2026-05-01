@@ -3,7 +3,7 @@
 @section('content')
     <h3>Edit Peminjaman</h3>
 
-    <form action="{{ route('peminjaman.update', $peminjaman->id) }}" method="POST">
+    <form action="{{ route('peminjaman.update', $peminjaman->id_peminjaman) }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -24,8 +24,8 @@
             <label>Buku</label>
             <select name="id_buku" class="form-control">
                 @foreach ($buku as $b)
-                    <option value="{{ $b->id }}" {{ $b->id == $peminjaman->id_buku ? 'selected' : '' }}>
-                        {{ $b->judul_buku }}
+                    <option value="{{ $b->id_buku }}" {{ $b->id_buku == $peminjaman->id_buku ? 'selected' : '' }}>
+                        {{ $b->judul }}
                     </option>
                 @endforeach
             </select>

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Login</title>
+    <title>Login Perpus NctZen</title>
 
     <style>
         * {
@@ -13,7 +13,7 @@
 
         body {
             font-family: Arial;
-            background: url("{{ asset('images/bgperpus.jpeg') }}") no-repeat center center/cover;
+            background: url("{{ asset('images/greenlibrary2.jpeg') }}") no-repeat center center/cover;
             height: 100vh;
         }
 
@@ -58,7 +58,7 @@
         button {
             width: 100%;
             padding: 10px;
-            background: #be8539;
+            background: #0cc248;
             color: white;
             border: none;
             border-radius: 8px;
@@ -66,7 +66,7 @@
         }
 
         button:hover {
-            background: #be8539;
+            background: #0cc248;
         }
 
         .error {
@@ -83,7 +83,7 @@
 
         <div class="login-box">
 
-            <h2>Login</h2>
+            <h2>LOGIN PERPUS NCTZEN💚🤍</h2>
 
             @if (session('error'))
                 <p class="error">{{ session('error') }}</p>

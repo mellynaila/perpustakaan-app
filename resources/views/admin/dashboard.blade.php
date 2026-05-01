@@ -15,7 +15,8 @@
                             <p class="small mb-1">Total Anggota</p>
                             <h1>{{ $totalAnggota }}</h1>
                         </div>
-                        <div class="icon-box">👥</div>
+                        <div class="icon-box"><img src="{{ asset('images/anggota2.png') }}" alt="Anggota" width="50"
+                                height="45"></div>
                     </div>
                 </div>
             </div>
@@ -28,7 +29,8 @@
                             <p class="small mb-1">Total Buku</p>
                             <h1>{{ $totalBuku }}</h1>
                         </div>
-                        <div class="icon-box">📚</div>
+                        <div class="icon-box"><img src="{{ asset('images/book.png') }}" alt="Buku" width="50"
+                                height="45"></div>
                     </div>
                 </div>
             </div>
@@ -41,7 +43,8 @@
                             <p class="small mb-1">Total Peminjaman</p>
                             <h1>{{ $totalPeminjaman }}</h1>
                         </div>
-                        <div class="icon-box">🔄</div>
+                        <div class="icon-box"><img src="{{ asset('images/reload2.png') }}" alt="Peminjaman" width="50"
+                                height="45"></div>
                     </div>
                 </div>
             </div>

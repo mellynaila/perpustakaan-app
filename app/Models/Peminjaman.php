@@ -20,6 +20,11 @@ class Peminjaman extends Model
         'denda'
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'id_peminjaman';
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELASI
@@ -28,12 +33,12 @@ class Peminjaman extends Model
 
     public function anggota()
     {
-        return $this->belongsTo(Anggota::class, 'id_anggota', 'id_anggota');
+        return $this->belongsTo(\App\Models\Anggota::class, 'id_anggota');
     }
 
     public function buku()
     {
-        return $this->belongsTo(Buku::class, 'id_buku', 'id_buku');
+        return $this->belongsTo(\App\Models\Buku::class, 'id_buku');
     }
 
     /*

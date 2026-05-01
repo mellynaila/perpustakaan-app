@@ -29,8 +29,7 @@
             <input type="number" name="tahun_terbit" value="{{ old('tahun_terbit') }}" placeholder="Tahun Terbit"
                 class="form-control mb-2">
 
-            <input type="number" name="jml_buku" value="{{ old('jml_buku') }}" placeholder="Jumlah Buku"
-                class="form-control mb-2">
+            <input type="number" name="stok" value="{{ old('stok') }}" placeholder="Stok" class="form-control mb-2">
 
             {{-- KATEGORI --}}
             <input type="text" name="kategori" value="{{ old('kategori') }}" placeholder="Kategori"

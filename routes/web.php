@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\BukuListController;
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PeminjamanController;
 
 /*
@@ -28,7 +30,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
 
     Route::resource('buku', BukuController::class);
-    Route::resource('anggota', AnggotaController::class);
+    Route::resource('anggota', AnggotaController::class)
+        ->parameters(['anggota' => 'anggota']);
     Route::resource('peminjaman', PeminjamanController::class);
 });
 
@@ -44,12 +47,7 @@ Route::middleware(['auth', 'role:anggota'])->group(function () {
         ->name('anggota.dashboard');
 
     // ganti biar tidak bentrok dengan admin
-    Route::get('/buku-list', [BukuController::class, 'indexAnggota'])
-        ->name('anggota.buku');
+    Route::get('/buku-list', [BukuListController::class, 'indexAnggota']);
 
-    Route::post('/pinjam/{id}', [PeminjamanController::class, 'pinjam'])
-        ->name('pinjam.buku');
-
-    Route::get('/riwayat', [PeminjamanController::class, 'riwayat'])
-        ->name('riwayat.index');
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
 });

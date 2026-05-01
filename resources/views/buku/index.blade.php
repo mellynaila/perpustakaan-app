@@ -18,7 +18,7 @@
             <th>Penulis</th>
             <th>Penerbit</th>
             <th>Tahun_terbit</th>
-            <th>Jumlah</th>
+            <th>Stok</th>
             <th>Kategori</th>
             <th>Status</th>
             <th>Aksi</th>
@@ -31,7 +31,7 @@
                 <td>{{ $item->penulis }}</td>
                 <td>{{ $item->penerbit }}</td>
                 <td>{{ $item->tahun_terbit }}</td>
-                <td>{{ $item->jml_buku }}</td>
+                <td>{{ $item->stok }}</td>
                 <td>{{ $item->kategori }}</td>
                 <td>{{ $item->status }}</td>
                 <td>

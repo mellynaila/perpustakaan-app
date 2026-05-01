@@ -17,8 +17,7 @@
         <input type="number" name="tahun_terbit" value="{{ $buku->tahun_terbit }}" class="form-control mb-2"
             placeholder="Tahun Terbit">
 
-        <input type="number" name="jml_buku" value="{{ $buku->jml_buku }}" class="form-control mb-2"
-            placeholder="Jumlah Buku">
+        <input type="number" name="stok" value="{{ $buku->stok }}" class="form-control mb-2" placeholder="Stok">
 
         <input type="text" name="kategori" value="{{ $buku->kategori }}" class="form-control mb-2"
             placeholder="Kategori">

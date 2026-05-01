@@ -24,9 +24,14 @@ class DashboardController extends Controller
 
     public function anggota()
     {
+        // jumlah pinjaman aktif user login
+        $totalPinjam = \App\Models\Peminjaman::where('id_anggota', auth()->id())
+            ->where('status', 'dipinjam')
+            ->count();
 
-        $totalPinjam = Peminjaman::where('id_anggota', Auth::id())->count();
+        // total semua buku
+        $totalBuku = \App\Models\Buku::count();
 
-        return view('anggota.dashboard', compact('totalPinjam'));
+        return view('anggota.dashboard', compact('totalPinjam', 'totalBuku'));
     }
 }

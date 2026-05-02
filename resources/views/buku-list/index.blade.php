@@ -46,9 +46,8 @@
                             </p>
 
                             {{-- FORM PINJAM --}}
-                            <form action="{{ route('peminjaman.store') }}" method="POST" class="mt-auto">
+                            <form action="{{ route('anggota.pinjam', $item->id_buku) }}" method="POST">
                                 @csrf
-                                <input type="hidden" name="buku_id" value="{{ $item->id }}">
 
                                 <button type="submit" class="btn btn-primary btn-sm w-100"
                                     {{ ($item->stok ?? 0) <= 0 ? 'disabled' : '' }}>
@@ -56,7 +55,6 @@
                                     {{ ($item->stok ?? 0) <= 0 ? 'Stok Habis' : '📖 Pinjam Buku' }}
                                 </button>
                             </form>
-
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 <ul class="nav flex-column">
 
     <li>
-        <a href="/dashboard-anggota" class="nav-link {{ request()->routeIs('dashboard.anggota') ? 'active' : '' }}">
+        <a href="/dashboard-anggota" class="nav-link {{ request()->routeIs('anggota.dashboard') ? 'active' : '' }}">
             Dashboard
         </a>
     </li>
@@ -13,8 +13,8 @@
     </li>
 
     <li>
-        <a href="/laporan" class="nav-link {{ request()->routeIs('laporan.index') ? 'active' : '' }}">
-            Laporan Peminjaman
+        <a href="/riwayat" class="nav-link {{ request()->routeIs('anggota.riwayat') ? 'active' : '' }}">
+            Riwayat Peminjaman
         </a>
     </li>
 

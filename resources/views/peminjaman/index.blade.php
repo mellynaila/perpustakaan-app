@@ -13,10 +13,6 @@
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
 
-        <a href="{{ route('peminjaman.create') }}" class="btn btn-primary mb-3">
-            + Tambah Peminjaman
-        </a>
-
         <table class="table table-bordered table-hover align-middle text-center">
             <thead class="table-dark">
                 <tr>

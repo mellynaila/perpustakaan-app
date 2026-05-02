@@ -6,7 +6,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\BukuListController;
 use App\Http\Controllers\AnggotaController;
-use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PeminjamanController;
 
 /*
@@ -46,8 +45,13 @@ Route::middleware(['auth', 'role:anggota'])->group(function () {
     Route::get('/dashboard-anggota', [DashboardController::class, 'anggota'])
         ->name('anggota.dashboard');
 
-    // ganti biar tidak bentrok dengan admin
     Route::get('/buku-list', [BukuListController::class, 'indexAnggota']);
 
-    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    // PINJAM
+    Route::post('/pinjam/{id}', [PeminjamanController::class, 'pinjam'])
+        ->name('anggota.pinjam');
+
+    // RIWAYAT
+    Route::get('/riwayat', [PeminjamanController::class, 'riwayat'])
+        ->name('anggota.riwayat');
 });

@@ -36,7 +36,6 @@ class PeminjamanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_anggota' => 'required',
             'id_buku' => 'required',
         ]);
 
@@ -47,7 +46,7 @@ class PeminjamanController extends Controller
         }
 
         Peminjaman::create([
-            'id_anggota' => $request->id_anggota,
+            'id_anggota' => Auth::id(),
             'id_buku' => $request->id_buku,
             'tanggal_pinjam' => now(),
             'tanggal_kembali' => now()->addDays(7),
@@ -57,8 +56,8 @@ class PeminjamanController extends Controller
 
         $buku->decrement('stok');
 
-        return redirect()->route('peminjaman.index')
-            ->with('success', 'Berhasil ditambahkan');
+        return redirect()->route('laporan.index')
+            ->with('success', 'Buku berhasil dipinjam');
     }
 
     // =========================
@@ -111,18 +110,20 @@ class PeminjamanController extends Controller
 
         $buku->decrement('stok');
 
-        // langsung ke laporan
-        return redirect()->route('laporan.index')
+        return redirect()->route('anggota.riwayat')
             ->with('success', 'Buku berhasil dipinjam');
     }
 
     // =========================
-    // ANGGOTA - LAPORAN
+    // ANGGOTA - RIWAYAT
     // =========================
-    public function laporan()
+    public function riwayat()
     {
-        $data = Peminjaman::with(['anggota', 'buku'])->first(); // hanya 1
+        $data = Peminjaman::with('buku')
+            ->where('id_anggota', Auth::id())
+            ->latest()
+            ->get();
 
-        return view('laporan.index', compact('data'));
+        return view('anggota.riwayat', compact('data'));
     }
 }

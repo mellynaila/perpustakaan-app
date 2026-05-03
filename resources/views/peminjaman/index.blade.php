@@ -4,6 +4,10 @@
     <div class="container">
         <h3 class="mb-3">Data Peminjaman</h3>
 
+        <a href="{{ route('peminjaman.create') }}" class="btn btn-primary">
+            + Tambah Peminjaman
+        </a>
+
         {{-- ALERT --}}
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>

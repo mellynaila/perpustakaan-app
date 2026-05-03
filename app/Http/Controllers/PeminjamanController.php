@@ -37,6 +37,7 @@ class PeminjamanController extends Controller
     {
         $request->validate([
             'id_buku' => 'required',
+            'id_anggota' => 'required',
         ]);
 
         $buku = Buku::findOrFail($request->id_buku);
@@ -46,7 +47,7 @@ class PeminjamanController extends Controller
         }
 
         Peminjaman::create([
-            'id_anggota' => Auth::id(),
+            'id_anggota' => $request->id_anggota,
             'id_buku' => $request->id_buku,
             'tanggal_pinjam' => now(),
             'tanggal_kembali' => now()->addDays(7),
@@ -56,12 +57,24 @@ class PeminjamanController extends Controller
 
         $buku->decrement('stok');
 
-        return redirect()->route('laporan.index')
+        return redirect()->route('peminjaman.index')
             ->with('success', 'Buku berhasil dipinjam');
     }
 
     // =========================
-    // ADMIN - KEMBALIKAN
+    // EDIT
+    // =========================
+    public function edit($id)
+    {
+        $peminjaman = Peminjaman::findOrFail($id);
+        $anggota = Anggota::all();
+        $buku = Buku::all();
+
+        return view('peminjaman.edit', compact('peminjaman', 'anggota', 'buku'));
+    }
+
+    // =========================
+    // KEMBALIKAN (MASIH PAKAI UPDATE)
     // =========================
     public function update(Request $request, $id)
     {
@@ -70,10 +83,9 @@ class PeminjamanController extends Controller
         $tgl_kembali = Carbon::now();
         $deadline = Carbon::parse($p->tanggal_kembali);
 
-        $hari_telat = 0;
-        if ($tgl_kembali->greaterThan($deadline)) {
-            $hari_telat = $deadline->diffInDays($tgl_kembali);
-        }
+        $hari_telat = $tgl_kembali->greaterThan($deadline)
+            ? $deadline->diffInDays($tgl_kembali)
+            : 0;
 
         $denda = $hari_telat * 1000;
 
@@ -86,6 +98,24 @@ class PeminjamanController extends Controller
         $p->buku->increment('stok');
 
         return back()->with('success', 'Dikembalikan. Denda: Rp ' . number_format($denda));
+    }
+
+    // =========================
+    // DELETE (TAMBAHAN FIX ERROR)
+    // =========================
+    public function destroy($id)
+    {
+        $p = Peminjaman::with('buku')->findOrFail($id);
+
+        // jika belum dikembalikan → stok dikembalikan
+        if ($p->status == 'dipinjam') {
+            $p->buku->increment('stok');
+        }
+
+        $p->delete();
+
+        return redirect()->route('peminjaman.index')
+            ->with('success', 'Data berhasil dihapus');
     }
 
     // =========================

@@ -20,17 +20,11 @@
             min-height: 100vh;
         }
 
-        .navbar-neon {
-            background: #ffffff;
-            border-bottom: 2px solid #39ff14;
-        }
-
         .btn-white {
             background: white;
             border: 1px solid #ccc;
         }
 
-        /* DASHBOARD CARD */
         .card-modern {
             border-radius: 16px;
             padding: 20px;
@@ -54,13 +48,6 @@
         .card-modern.yellow {
             background: linear-gradient(135deg, #f7971e, #ffd200);
         }
-
-        .icon-box {
-            font-size: 28px;
-            background: rgba(255, 255, 255, 0.25);
-            padding: 12px;
-            border-radius: 10px;
-        }
     </style>
 </head>
 
@@ -71,12 +58,12 @@
         <!-- SIDEBAR -->
         <div class="sidebar p-3">
             <h4 class="d-flex align-items-center gap-2">
-                <img src="{{ asset('images/logonct.png') }}" style="height:50px; width:auto; object-fit:contain;">
-                Perpus
+                <img src="{{ asset('images/logonct.png') }}" style="height:60px;">
+                Perpus NctZen
             </h4>
+
             <hr style="border-color:#39ff14;">
 
-            {{-- pilih sidebar sesuai role --}}
             @if (auth()->user()->role == 'admin')
                 @include('layouts.sidebar-admin')
             @else
@@ -87,29 +74,9 @@
         <!-- CONTENT -->
         <div class="flex-grow-1">
 
-            <!-- NAVBAR -->
-            <nav class="navbar navbar-neon px-3 d-flex justify-content-between">
-                <span class="navbar-brand d-flex align-items-center gap-2">
-                    <img src="{{ asset('images/logonct.png') }}" style="height:60px; width:auto; object-fit:contain;">
-                    Sistem Perpustakaan Czennie 127
-                </span>
+            {{-- NAVBAR DIPANGGIL DI SINI --}}
+            @include('layouts.navbar')
 
-                <div class="d-flex align-items-center gap-3">
-                    <span class="fw-bold text-dark">
-                        Halo, {{ auth()->user()->name }}
-                    </span>
-
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button class="btn btn-white btn-sm logout-btn">
-                            <img src="{{ asset('images/gembok.png') }}" width="18">
-                            <span class="fw-bold">LOGOUT</span>
-                        </button>
-                    </form>
-                </div>
-            </nav>
-
-            <!-- ISI HALAMAN -->
             <div class="p-4">
                 @yield('content')
             </div>

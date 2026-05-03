@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('penulis');
             $table->string('penerbit');
             $table->year('tahun_terbit');
-            $table->integer('jml_buku')->default(0);
+            $table->integer('stok')->default(0);
             $table->string('kategori')->nullable();
             $table->string('status')->default('tersedia');
             $table->timestamps();
